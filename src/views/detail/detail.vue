@@ -1,10 +1,12 @@
 <template>
   <div id="detail">
-    <detail-navbar />
+    <detail-navbar @titleClick="titleClick" />
     <detail-swiper :topImages="topImage" />
     <detail-base-info :goods="goods" />
     <detail-shop-info :shop="shop" />
     <detail-goods-info :detail-info="detailInfo" />
+    <detail-comment-info :commentInfo="commentInfo" />
+    <detail-bottom-bar />
   </div>
 </template>
 
@@ -15,13 +17,17 @@ import { getDetail, GoodsInfo, Shop } from "../../network/detail";
 import DetailBaseInfo from "./childComps/DetailBaseInfo.vue";
 import DetailShopInfo from "./childComps/DetailShopInfo.vue";
 import DetailGoodsInfo from "./childComps/DetailGoodsInfo.vue";
+import DetailCommentInfo from "./childComps/DetailCommentInfo.vue";
+import DetailBottomBar from "./childComps/DetailBottomBar.vue";
 export default {
   components: {
     DetailNavbar,
     detailSwiper,
     DetailBaseInfo,
     DetailShopInfo,
-    DetailGoodsInfo
+    DetailGoodsInfo,
+    DetailCommentInfo,
+    DetailBottomBar
   },
 
   name: "detail",
@@ -31,7 +37,9 @@ export default {
       topImage: [],
       goods: {},
       shop: {},
-      detailInfo: {}
+      detailInfo: {},
+      commentInfo: {},
+      recommend: []
     };
   },
   created() {
@@ -46,7 +54,16 @@ export default {
       );
       this.shop = new Shop(data.shopInfo);
       this.detailInfo = data.detailInfo;
+      // comment
+      if (data.rate.cRate !== 0) {
+        this.commentInfo = data.rate.list[0];
+      }
     });
+  },
+  methods: {
+    titleClick(index) {
+      console.log(index);
+    }
   }
 };
 </script>
